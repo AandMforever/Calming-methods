@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Self-Soothing Guide</title>
+<style>
+  body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: #fef3f9;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+  }
+  .slide {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px;
+    border-radius: 15px;
+    background: #fff3fc;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    width: 90%;
+    max-width: 500px;
+  }
+  .slide.active { display: flex; }
+  button {
+    margin: 10px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 10px;
+    background: #cfa2f7;
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  button:hover { background: #b07de6; }
+  input { padding: 8px; margin: 5px; border-radius: 8px; border: 1px solid #ddd; width: 80%; }
+  canvas { border: 1px solid #ddd; margin: 10px 0; border-radius: 10px; }
+</style>
+</head>
+<body>
+
+<!-- Slide 1: Intro -->
+<div class="slide active" id="slide1">
+  <h1>Hi my love, you’re unfortunately here because you were thinking about self harm 💖</h1>
+  <button onclick="nextSlide('true')">True</button>
+  <button onclick="nextSlide('false')">False</button>
+</div>
+
+<!-- Slide 2: Misguided -->
+<div class="slide" id="slide2">
+  <h1>Sorry, I misdirected you 💕</h1>
+  <button onclick="exitSite()">Exit</button>
+</div>
+
+<!-- Slide 3: 54321 Method Intro -->
+<div class="slide" id="slide3">
+  <h1>This is the 54321 method 🌸</h1>
+  <p>Look around and identify:<br>
+     5 things you see<br>
+     4 things you hear<br>
+     3 things you can touch<br>
+     2 things you smell<br>
+     1 thing you’re thinking about</p>
+  <button onclick="showSlide('slide4')">Next</button>
+</div>
+
+<!-- Slide 4: Type answers -->
+<div class="slide" id="slide4">
+  <h1>Type your answers ✍️</h1>
+  <div id="answersContainer"></div>
+  <button onclick="reviewAnswers()">Review your answers</button>
+</div>
+
+<!-- Slide 5: Review -->
+<div class="slide" id="slide5">
+  <h1>Review your answers 🔍</h1>
+  <div id="reviewContainer"></div>
+  <button onclick="showSlide('slide6')">Next</button>
+</div>
+
+<!-- Slide 6: Grab soft item -->
+<div class="slide" id="slide6">
+  <h1>Grab something soft and cuddly 🧸</h1>
+  <button onclick="showSlide('slide7')">Okay</button>
+</div>
+
+<!-- Slide 7: Hug guidance -->
+<div class="slide" id="slide7">
+  <h1>Hug it 3 times and release stress 💖</h1>
+  <button onclick="showSlide('slide8')">Next</button>
+</div>
+
+<!-- Slide 8: Feeling check -->
+<div class="slide" id="slide8">
+  <h1>After all that, how are you honestly feeling?</h1>
+  <button onclick="feeling('better')">I feel better 😊</button>
+  <button onclick="feeling('stillBad')">Still bad 😔</button>
+</div>
+
+<!-- Slide 9: Draw feelings -->
+<div class="slide" id="slide9">
+  <h1>Draw your feeling, my love 🎨</h1>
+  <input type="color" id="colorPicker" value="#cfa2f7">
+  <canvas id="drawingCanvas" width="400" height="300"></canvas>
+  <button onclick="showSlide('slide10')">Done</button>
+</div>
+
+<!-- Slide 10: Follow the dot -->
+<div class="slide" id="slide10">
+  <h1>Follow the dot 🟢</h1>
+  <canvas id="dotCanvas" width="400" height="300"></canvas>
+  <button onclick="dotFinished()">Done</button>
+</div>
+
+<!-- Slide 11: Deep Breathing -->
+<div class="slide" id="slide11">
+  <h1>Take 3 slow breaths 🌬️</h1>
+  <p>Inhale… Exhale… Repeat</p>
+  <button onclick="showSlide('slide12')">Done</button>
+</div>
+
+<!-- Slide 12: Positive Affirmations -->
+<div class="slide" id="slide12">
+  <h1>Write something nice about yourself 💖</h1>
+  <input id="affirmationInput" placeholder="I am…">
+  <button onclick="showSlide('slide13')">Done</button>
+</div>
+
+<!-- Slide 13: Confetti Celebration -->
+<div class="slide" id="slide13">
+  <h1>Yay! You did amazing 🎉</h1>
+  <canvas id="confettiCanvas" width="400" height="300"></canvas>
+  <button onclick="exitSite()">Finish</button>
+</div>
+
+<script>
+let currentSlide = 'slide1';
+let answers = { see: [], hear: [], touch: [], smell: [], think: [] };
+
+function showSlide(id){
+  document.getElementById(currentSlide).classList.remove('active');
+  currentSlide = id;
+  document.getElementById(currentSlide).classList.add('active');
+  if(id==='slide4') createInputs();
+  if(id==='slide10') startDotAnimation();
+  if(id==='slide13') startConfetti();
+}
+
+function nextSlide(choice){
+  if(choice==='true') showSlide('slide3');
+  else showSlide('slide2');
+}
+
+function exitSite(){
+  alert("You can close the tab now 💖");
+}
+
+function createInputs(){
+  const container = document.getElementById('answersContainer');
+  container.innerHTML='';
+  ['see','hear','touch','smell','think'].forEach((key,i)=>{
+    for(let j=1;j<=[5,4,3,2,1][i]; j++){
+      let input = document.createElement('input');
+      input.placeholder=`${key} #${j}`;
+      input.oninput=()=>answers[key][j-1]=input.value;
+      container.appendChild(input);
+    }
+  });
+}
+
+function reviewAnswers(){
+  const review = document.getElementById('reviewContainer');
+  review.innerHTML='';
+  for(let key in answers){
+    review.innerHTML += `<h3>${key.toUpperCase()}</h3>`;
+    answers[key].forEach((val,i)=>{
+      review.innerHTML+=`<p>${i+1}: ${val||'[empty]'}</p>`;
+    });
+  }
+  showSlide('slide5');
+}
+
+function feeling(status){
+  if(status==='better') exitSite();
+  else showSlide('slide9');
+}
+
+// Drawing Canvas
+const canvas = document.getElementById('drawingCanvas');
+const ctx = canvas?.getContext('2d');
+let drawing=false;
+let brushColor='#cfa2f7';
+document.getElementById('colorPicker').addEventListener('input',(e)=>brushColor=e.target.value);
+if(ctx){
+  canvas.addEventListener('mousedown',()=>drawing=true);
+  canvas.addEventListener('mouseup',()=>drawing=false);
+  canvas.addEventListener('mousemove',(e)=>{
+    if(drawing){
+      ctx.fillStyle=brushColor;
+      ctx.beginPath();
+      ctx.arc(e.offsetX,e.offsetY,5,0,Math.PI*2);
+      ctx.fill();
+    }
+  });
+}
+
+// Dot Animation
+const dotCanvas=document.getElementById('dotCanvas');
+const dotCtx=dotCanvas?.getContext('2d');
+function startDotAnimation(){
+  if(!dotCtx) return;
+  let x=50, y=150, dx=2, dy=1.5;
+  dotCtx.clearRect(0,0,dotCanvas.width,dotCanvas.height);
+  const interval=setInterval(()=>{
+    dotCtx.clearRect(0,0,dotCanvas.width,dotCanvas.height);
+    dotCtx.beginPath();
+    dotCtx.arc(x,y,10,0,Math.PI*2);
+    dotCtx.fillStyle='#cfa2f7';
+    dotCtx.fill();
+    x+=dx; y+=dy;
+    if(x>dotCanvas.width-10 || x<10) dx*=-1;
+    if(y>dotCanvas.height-10 || y<10) dy*=-1;
+  },20);
+  window.dotInterval=interval;
+}
+function dotFinished(){
+  clearInterval(window.dotInterval);
+  showSlide('slide8');
+}
+
+// Confetti Animation
+const confettiCanvas=document.getElementById('confettiCanvas');
+const confettiCtx=confettiCanvas?.getContext('2d');
+function startConfetti(){
+  if(!confettiCtx) return;
+  let confetti=[];
+  for(let i=0;i<100;i++){
+    confetti.push({x:Math.random()*400,y:Math.random()*300,r:Math.random()*5+2,dy:Math.random()*2+1,color:`hsl(${Math.random()*360},70%,70%)`});
+  }
+  const interval=setInterval(()=>{
+    confettiCtx.clearRect(0,0,400,300);
+    confetti.forEach(c=>{
+      confettiCtx.beginPath();
+      confettiCtx.fillStyle=c.color;
+      confettiCtx.arc(c.x,c.y,c.r,0,Math.PI*2);
+      confettiCtx.fill();
+      c.y+=c.dy;
+      if(c.y>300) c.y=0;
+    });
+  },20);
+  window.confettiInterval=interval;
+}
+</script>
+</body>
+</html>
