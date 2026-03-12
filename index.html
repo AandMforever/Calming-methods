@@ -11,11 +11,10 @@ body {
   margin:0; padding:0;
   background: linear-gradient(135deg, #fceaff, #fef3f9);
   display:flex; justify-content:center; align-items:center;
-  min-height:100vh;
-  overflow:hidden;
+  min-height:100vh; overflow:hidden;
 }
 
-/* ===== Slide styling ===== */
+/* ===== Slides ===== */
 .slide {
   display:none;
   flex-direction:column;
@@ -31,55 +30,31 @@ body {
   transition: opacity 0.6s ease;
   position:relative;
 }
-.slide.active { display:flex; }
+.slide.active { display:flex; opacity:1; }
 
 /* ===== Buttons ===== */
 button {
-  margin:10px;
-  padding:12px 25px;
+  margin:10px; padding:12px 25px;
   border:none; border-radius:12px;
   background: linear-gradient(90deg,#cfa2f7,#e7a2f7);
   color:#fff; font-size:1.05rem; cursor:pointer;
   transition: all 0.3s ease;
 }
-button:hover {
-  transform: scale(1.05);
-  box-shadow:0 4px 12px rgba(0,0,0,0.25);
-}
+button:hover { transform: scale(1.05); box-shadow:0 4px 12px rgba(0,0,0,0.25); }
 
 /* ===== Inputs ===== */
 input[type=text], input[type=color], input[type=number] {
   padding:8px; margin:5px; border-radius:8px; border:1px solid #ddd;
-  width:80%;
-  font-size:1rem;
+  width:80%; font-size:1rem;
 }
 
 /* ===== Canvas ===== */
 canvas { border:1px solid #ddd; border-radius:10px; margin:10px 0; background:#fff8ff; }
-
-/* ===== Floating hearts ===== */
-.heart {
-  position:absolute;
-  width:20px; height:20px;
-  background:red; transform:rotate(45deg);
-  animation: floatUp linear infinite;
-  opacity:0.7;
-}
-.heart::before, .heart::after {
-  content:""; position:absolute;
-  width:20px; height:20px; background:red; border-radius:50%;
-}
-.heart::before { top:-10px; left:0; }
-.heart::after { left:10px; top:0; }
-@keyframes floatUp {
-  0% { transform:translateY(0) rotate(45deg); opacity:0.7; }
-  100% { transform:translateY(-300px) rotate(45deg); opacity:0; }
-}
 </style>
 </head>
 <body>
 
-<!-- ===== Slide 1: Intro ===== -->
+<!-- Slide 1: Intro -->
 <div class="slide active" id="slide1">
 <h1>Hi my love, you’re unfortunately here because you were thinking about self harm 💖</h1>
 <button onclick="nextSlide('true')">True</button>
@@ -92,34 +67,17 @@ canvas { border:1px solid #ddd; border-radius:10px; margin:10px 0; background:#f
 <button onclick="exitSite()">Exit</button>
 </div>
 
-<!-- ===== 54321 Slides ===== -->
-<div class="slide" id="slide3">
-<h1>5 things you see 👀</h1>
-<div id="seeInputs"></div>
-<button onclick="nextStep('see','slide4')">Next</button>
-</div>
+<!-- 54321 Slides -->
+<div class="slide" id="slide3"><h1>5 things you see 👀</h1><div id="seeInputs"></div><button onclick="nextStep('see','slide4')">Next</button></div>
+<div class="slide" id="slide4"><h1>4 things you hear 👂</h1><div id="hearInputs"></div><button onclick="nextStep('hear','slide5')">Next</button></div>
+<div class="slide" id="slide5"><h1>3 things you can touch ✋</h1><div id="touchInputs"></div><button onclick="nextStep('touch','slide6')">Next</button></div>
+<div class="slide" id="slide6"><h1>2 things you smell 👃</h1><div id="smellInputs"></div><button onclick="nextStep('smell','slide7')">Next</button></div>
+<div class="slide" id="slide7"><h1>1 thing you’re thinking about 💭</h1><div id="thinkInputs"></div><button onclick="showSlide('slideReview')">Next</button></div>
 
-<div class="slide" id="slide4">
-<h1>4 things you hear 👂</h1>
-<div id="hearInputs"></div>
-<button onclick="nextStep('hear','slide5')">Next</button>
-</div>
-
-<div class="slide" id="slide5">
-<h1>3 things you can touch ✋</h1>
-<div id="touchInputs"></div>
-<button onclick="nextStep('touch','slide6')">Next</button>
-</div>
-
-<div class="slide" id="slide6">
-<h1>2 things you smell 👃</h1>
-<div id="smellInputs"></div>
-<button onclick="nextStep('smell','slide7')">Next</button>
-</div>
-
-<div class="slide" id="slide7">
-<h1>1 thing you’re thinking about 💭</h1>
-<div id="thinkInputs"></div>
+<!-- Slide Review -->
+<div class="slide" id="slideReview">
+<h1>Review your 54321 answers 💖</h1>
+<div id="reviewList"></div>
 <button onclick="showSlide('slide8')">Next</button>
 </div>
 
@@ -152,7 +110,7 @@ canvas { border:1px solid #ddd; border-radius:10px; margin:10px 0; background:#f
 <button onclick="showSlide('slide12')">Done</button>
 </div>
 
-<!-- Slide 12: Dot -->
+<!-- Slide 12: Follow-the-dot -->
 <div class="slide" id="slide12">
 <h1>Follow the dot 🟢</h1>
 <canvas id="dotCanvas"></canvas>
@@ -162,15 +120,8 @@ canvas { border:1px solid #ddd; border-radius:10px; margin:10px 0; background:#f
 <!-- Slide 13: Breathing -->
 <div class="slide" id="slide13">
 <h1>Take 3 slow breaths 🌬️</h1>
-<p>Inhale… Exhale… Repeat</p>
-<button onclick="showSlide('slide14')">Done</button>
-</div>
-
-<!-- Slide 14: Affirmations -->
-<div class="slide" id="slide14">
-<h1>Write something nice about yourself 💖</h1>
-<input id="affirmationInput" placeholder="I am…">
-<button onclick="showSlide('slide15')">Done</button>
+<canvas id="breathCanvas" width="300" height="300"></canvas>
+<button onclick="showSlide('slide10')">Done</button>
 </div>
 
 <!-- Slide 15: Confetti -->
@@ -183,56 +134,103 @@ canvas { border:1px solid #ddd; border-radius:10px; margin:10px 0; background:#f
 <script>
 // ===== Slide Logic =====
 let currentSlide='slide1';
-let answers={ see:[], hear:[], touch:[], smell:[], think:[] };
+let answers={see:[], hear:[], touch:[], smell:[], think:[]};
+
 function showSlide(id){
   document.getElementById(currentSlide).classList.remove('active');
   currentSlide=id;
   document.getElementById(id).classList.add('active');
   if(id==='slide11') initDrawing();
   if(id==='slide12') startDotAnimation();
+  if(id==='slide13') startBreathing();
+  if(id==='slideReview') showReview();
   if(id==='slide15') startConfetti();
 }
+
 function nextSlide(choice){
   choice==='true'? showSlide('slide3') : showSlide('slide2');
 }
+
 function exitSite(){ alert("You can close the tab now 💖"); }
+
+// ===== 54321 Inputs =====
 function createInputsFor(id,num){
   const container=document.getElementById(id+'Inputs');
   container.innerHTML='';
   for(let i=1;i<=num;i++){
     let input=document.createElement('input');
     input.placeholder=`${id} #${i}`;
+    input.value=answers[id][i-1]||'';
     input.oninput=()=> answers[id][i-1]=input.value;
     container.appendChild(input);
   }
 }
 function nextStep(type,nextSlideId){ showSlide(nextSlideId); }
 ['see','hear','touch','smell','think'].forEach((type,i)=>createInputsFor(type,[5,4,3,2,1][i]));
-function feeling(status){ status==='better'? exitSite(): showSlide('slide11'); }
+
+function feeling(status){
+  if(status==='better') exitSite();
+  else showSlide('slide11'); // next optional exercise
+}
+
+// ===== Review 54321 =====
+function showReview(){
+  const review=document.getElementById('reviewList');
+  review.innerHTML='';
+  Object.keys(answers).forEach((key,i)=>{
+    let div=document.createElement('div');
+    div.innerHTML=`<strong>${key}:</strong> ${answers[key].join(', ')} <button onclick="editStep('${key}')">Edit</button>`;
+    review.appendChild(div);
+  });
+}
+function editStep(key){
+  const slideMap={'see':'slide3','hear':'slide4','touch':'slide5','smell':'slide6','think':'slide7'};
+  showSlide(slideMap[key]);
+}
 
 // ===== Drawing =====
+let canvas=document.getElementById('drawingCanvas');
+let ctx=canvas.getContext('2d');
 let drawing=false;
 let brushColor='#cfa2f7';
 let brushSize=5;
-let canvas=document.getElementById('drawingCanvas');
-let ctx=canvas.getContext('2d');
+
 function initDrawing(){
-  canvas.width=canvas.offsetWidth;
+  canvas.width=600;
   canvas.height=300;
   ctx.clearRect(0,0,canvas.width,canvas.height);
 }
-document.getElementById('colorPicker').addEventListener('input', e=>brushColor=e.target.value);
-document.getElementById('brushSize').addEventListener('input', e=>brushSize=parseInt(e.target.value));
-canvas.addEventListener('mousedown', ()=>drawing=true);
-canvas.addEventListener('mouseup', ()=>drawing=false);
-canvas.addEventListener('mouseout', ()=>drawing=false);
-canvas.addEventListener('mousemove', e=>{
+canvas.addEventListener('mousedown',()=>drawing=true);
+canvas.addEventListener('mouseup',()=>drawing=false);
+canvas.addEventListener('mouseout',()=>drawing=false);
+canvas.addEventListener('mousemove',draw);
+canvas.addEventListener('touchstart',(e)=>{ drawing=true; drawTouch(e); e.preventDefault(); });
+canvas.addEventListener('touchmove',drawTouch);
+canvas.addEventListener('touchend',()=>drawing=false);
+
+function draw(e){
   if(!drawing) return;
+  const rect=canvas.getBoundingClientRect();
+  const x=e.clientX-rect.left;
+  const y=e.clientY-rect.top;
   ctx.fillStyle=brushColor;
   ctx.beginPath();
-  ctx.arc(e.offsetX,e.offsetY,brushSize,0,Math.PI*2);
+  ctx.arc(x,y,brushSize,0,Math.PI*2);
   ctx.fill();
-});
+}
+function drawTouch(e){
+  if(!drawing) return;
+  const touch=e.touches[0];
+  const rect=canvas.getBoundingClientRect();
+  const x=touch.clientX-rect.left;
+  const y=touch.clientY-rect.top;
+  ctx.fillStyle=brushColor;
+  ctx.beginPath();
+  ctx.arc(x,y,brushSize,0,Math.PI*2);
+  ctx.fill();
+}
+document.getElementById('colorPicker').addEventListener('input', e=>brushColor=e.target.value);
+document.getElementById('brushSize').addEventListener('input', e=>brushSize=parseInt(e.target.value));
 function clearCanvas(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
 
 // ===== Dot =====
@@ -240,9 +238,9 @@ let dotCanvas=document.getElementById('dotCanvas');
 let dotCtx=dotCanvas.getContext('2d');
 let dotInterval;
 function startDotAnimation(){
-  dotCanvas.width=dotCanvas.offsetWidth; dotCanvas.height=300;
+  dotCanvas.width=600; dotCanvas.height=300;
   let x=Math.random()*dotCanvas.width, y=Math.random()*dotCanvas.height;
-  let dx=(Math.random()*4-2), dy=(Math.random()*4-2);
+  let dx=(Math.random()*6-3), dy=(Math.random()*6-3); // faster
   dotInterval=setInterval(()=>{
     dotCtx.clearRect(0,0,dotCanvas.width,dotCanvas.height);
     dotCtx.beginPath(); dotCtx.arc(x,y,10,0,2*Math.PI);
@@ -251,27 +249,27 @@ function startDotAnimation(){
     x+=dx; y+=dy;
     if(x>dotCanvas.width-10||x<10) dx*=-1;
     if(y>dotCanvas.height-10||y<10) dy*=-1;
-  },20);
+  },16); // 60fps
 }
 function dotFinished(){ clearInterval(dotInterval); showSlide('slide13'); }
 
-// ===== Confetti =====
-let confettiCanvas=document.getElementById('confettiCanvas');
-let confettiCtx=confettiCanvas.getContext('2d');
-function startConfetti(){
-  confettiCanvas.width=confettiCanvas.offsetWidth; confettiCanvas.height=300;
-  let confetti=[];
-  for(let i=0;i<150;i++){
-    confetti.push({x:Math.random()*confettiCanvas.width,y:Math.random()*confettiCanvas.height,r:Math.random()*5+2,dy:Math.random()*2+2,color:`hsl(${Math.random()*360},70%,70%)`});
-  }
-  setInterval(()=>{
-    confettiCtx.clearRect(0,0,confettiCanvas.width,confettiCanvas.height);
-    confetti.forEach(c=>{
-      confettiCtx.beginPath(); confettiCtx.fillStyle=c.color;
-      confettiCtx.arc(c.x,c.y,c.r,0,2*Math.PI); confettiCtx.fill();
-      c.y+=c.dy; if(c.y>confettiCanvas.height) c.y=0;
-    });
-  },20);
+// ===== Breathing =====
+let breathCanvas=document.getElementById('breathCanvas');
+let bCtx=breathCanvas.getContext('2d');
+let breathRadius=50, growing=true;
+let breathAnim;
+function startBreathing(){
+  breathAnim=setInterval(()=>{
+    bCtx.clearRect(0,0,breathCanvas.width,breathCanvas.height);
+    bCtx.beginPath();
+    bCtx.arc(breathCanvas.width/2,breathCanvas.height/2,breathRadius,0,Math.PI*2);
+    bCtx.fillStyle='rgba(207,162,247,0.5)';
+    bCtx.fill();
+    if(growing) breathRadius+=1;
+    else breathRadius-=1;
+    if(breathRadius>100) growing=false;
+    if(breathRadius<50) growing=true;
+  },30);
 }
 </script>
 </body>
